@@ -19,7 +19,7 @@ logging.basicConfig(
 )
 pinecone_key = "dc0204fc-778a-4fd1-9eb6-c80cd98da213"
 pinecone_env = "gcp-starter"
-embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
+embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
 index_name = "document"
 pinecone.init(api_key = pinecone_key, environment = pinecone_env)
 vector_store = Pinecone.from_existing_index(index_name,embeddings_model)
