@@ -13,7 +13,7 @@ import pinecone
 # Create your views here
 pinecone_key = "dc0204fc-778a-4fd1-9eb6-c80cd98da213"
 pinecone_env = "gcp-starter"
-embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
+embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
 index_name = "document"
 def not_logged_in(user):
     return not user.is_authenticated
