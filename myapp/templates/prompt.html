@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Prompt - My Website{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="form-group container mt-5">
+        <form action="{% url 'prompt' %}" method="post">
+            {% csrf_token %}
+            <label for="exampleFormControlTextarea1">Update Prompt</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="prompt" rows="13">{{text_content}}</textarea>
+            <button type="submit" class="btn btn-success mt-2"> submit</button>
+        </form>
+    </div>
+    <div class="loader" id="loader"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.getElementById("loader");
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function() {
+                loader.style.display = "block";
+            });
+        });
+    </script>
+{% endblock %}

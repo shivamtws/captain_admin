@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Data - My Website{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="form-group container mt-5">
+        <form action="{% url 'data' %}" method="post">
+            {% csrf_token %}
+            <label for="exampleFormControlTextarea1">Main Data</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="data" rows="13">{{text_content}}</textarea>
+            <button type="submit" class="btn btn-success mt-2"> Satrt Trainig</button>
+        </form>
+    </div>
+    
+{% endblock %}
