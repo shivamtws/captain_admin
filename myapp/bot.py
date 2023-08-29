@@ -19,7 +19,7 @@ logging.basicConfig(
 )
 pinecone_key = "dc0204fc-778a-4fd1-9eb6-c80cd98da213"
 pinecone_env = "gcp-starter"
-embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
+embeddings_model = mainEmbed(model='text-embedding-ada-002',openai_api_key="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")
 index_name = "document"
 pinecone.init(api_key = pinecone_key, environment = pinecone_env)
 vector_store = Pinecone.from_existing_index(index_name,embeddings_model)
@@ -46,7 +46,7 @@ chain_type_kwargs = {"prompt": PROMPT}
 #     print(i.page_content)
     
 def answer(vector_store,query): 
-    llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0.2,openai_api_key="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")
+    llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0.2,openai_api_key="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")
     retreiver = vector_store.as_retriever(search_type='similarity',search_kwargs={'k':3})
     # chain = RetrievalQA.from_chain_type(llm=llm, chain_type='stuff',retriever=retreiver)
     
