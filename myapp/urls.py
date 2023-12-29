@@ -9,5 +9,7 @@ urlpatterns = [
     path('prompt', views.prompt,name="prompt"),
     path('data', views.data,name="data"),
     path('logout/', views.logout_view, name="logout"),  # Added logout URL
+    path('promptDiscord', views.promptDiscord,name="promptDiscord"),
+    path('dataDiscord', views.dataDiscord,name="dataDiscord"),
 
 ]
