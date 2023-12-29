@@ -69,7 +69,7 @@ def prompt(request):
 def data(request):
     file_path = os.path.join(settings.BASE_DIR, 'myapp/data/mainData.txt')
     if request.method == 'POST':
-        delete_index(pinecone_key)
+        delete_index()
         new_content = request.POST.get('data')
         with open(file_path, 'w') as file:
             file.write(new_content)
@@ -129,16 +129,19 @@ def dataDiscord(request):
 
         with open(file_path, 'w') as file:
             file.write(new_content)
+        print(new_content)
 
-        delete_index(pinecone_key_discord)
+        delete_index_discord()
+        
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size = 256,
             chunk_overlap  = 0,
             length_function = len,
             add_start_index = True,
         )
+        print(new_content)
         chunks = text_splitter.create_documents([new_content])
-        create_index(index_name,chunks,pinecone_key_discord)    
+        create_index_discord(index_name,chunks)
         messages.success(request, 'Data updated successfully.')
         return redirect('dataDiscord')
     
@@ -151,10 +154,10 @@ def dataDiscord(request):
 
     return render(request, 'dataDiscord.html',context)
 
-def create_index(index_name,chunks,key):
+def create_index(index_name,chunks):
     from langchain.vectorstores import Pinecone
     from langchain.embeddings.openai import OpenAIEmbeddings
-    pinecone.init(api_key = key, environment=pinecone_env)
+    pinecone.init(api_key = pinecone_key, environment=pinecone_env)
 
     if index_name in pinecone.list_indexes():
         # print('this is already exit')
@@ -168,16 +171,47 @@ def create_index(index_name,chunks,key):
     return vector_store
 
 
-def delete_index(key,index_name = "all"):
+def delete_index(index_name = "all"):
     import pinecone
-    pinecone.init(api_key = key, environment=pinecone_env)
+    pinecone.init(api_key = pinecone_key, environment=pinecone_env)
 
     if index_name =="all":
         indexes = pinecone.list_indexes()
         print("Deleting All indexes...")
         for index in indexes:
-            pinecone.delete_index(key,index)        
-        print("delete all")    
+            pinecone.delete_index(index)
+        print("delete all")
     else:
-        pinecone.delete_index(key,index_name)
+        pinecone.delete_index(index_name)
         print("ok delete")
+
+def create_index_discord(index_name,chunks):
+    from langchain.vectorstores import Pinecone
+    from langchain.embeddings.openai import OpenAIEmbeddings
+    pinecone.init(api_key = pinecone_key_discord, environment=pinecone_env)
+
+    if index_name in pinecone.list_indexes():
+        # print('this is already exit')
+        vector_store = Pinecone.from_existing_index(index_name,embeddings_model)
+        # print("ok")
+    else:
+        print("create index")
+        pinecone.create_index(index_name,dimension=1536, metric='cosine')
+        vector_store = Pinecone.from_documents(chunks,embeddings_model,index_name=index_name)
+
+    return vector_store
+
+
+def delete_index_discord(index_name = "all"):
+    import pinecone
+    pinecone.init(api_key = pinecone_key_discord, environment=pinecone_env)
+
+    if index_name =="all":
+        indexes = pinecone.list_indexes()
+        print("Deleting All indexes...")
+        for index in indexes:
+            pinecone.delete_index(index)
+        print("delete all")
+    else:
+        pinecone.delete_index(index_name)
+        print("ok delete")        
